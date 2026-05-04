@@ -2,77 +2,135 @@ let currentProblem = "";
 let step = 0;
 let answers = [];
 
+const vehicleData = {
+  "2006-ford-f250-6.0": {
+    name: "2006 Ford F-250 6.0 Powerstroke",
+    fuseBoxes: [
+      "Under-hood power distribution box",
+      "Interior fuse panel under dash"
+    ],
+    commonFuses: [
+      "PCM power fuse",
+      "FICM power fuse",
+      "Fuel pump fuse/relay",
+      "Starter relay",
+      "Ignition switch fuse",
+      "Cluster fuse"
+    ],
+    commonProblems: [
+      "Cranks but no start",
+      "Low ICP pressure",
+      "FICM voltage issues",
+      "Cam/crank sync problems",
+      "Fuel delivery issues",
+      "Battery voltage drop while cranking"
+    ]
+  },
+
+  "2005-jeep-liberty": {
+    name: "2005 Jeep Liberty",
+    fuseBoxes: [
+      "Power distribution center under hood",
+      "Interior fuse panel"
+    ],
+    commonFuses: [
+      "Ignition fuse",
+      "Starter relay",
+      "Fuel pump relay",
+      "Brake light fuse",
+      "PCM fuse"
+    ],
+    commonProblems: [
+      "No crank",
+      "Brake light issues",
+      "Dash electrical issues",
+      "Fuel pump problems"
+    ]
+  },
+
+  "2000-chevy-blazer": {
+    name: "2000 Chevy Blazer",
+    fuseBoxes: [
+      "Under-hood fuse block",
+      "Interior fuse panel"
+    ],
+    commonFuses: [
+      "ECM fuse",
+      "Fuel pump relay",
+      "Starter relay",
+      "Brake light fuse",
+      "IGN fuse"
+    ],
+    commonProblems: [
+      "No start",
+      "Fuel pump failure",
+      "Brake light problems",
+      "Ignition switch issues"
+    ]
+  }
+};
+
 const problems = {
   wontStart: {
     title: "🚗 Won’t Start",
     questions: [
-      "Does the engine crank when you turn the key?",
+      "Does the engine crank?",
       "Do the dash lights come on?",
       "Do you hear clicking?",
       "Does it try to start with starting fluid?",
       "Is the security light flashing or staying on?"
     ]
   },
-
   overheating: {
     title: "🔥 Overheating",
     questions: [
-      "Is the coolant level low?",
-      "Do you see coolant leaking?",
-      "Do the radiator fans turn on?",
-      "Does the heater blow hot air?",
-      "Is steam coming from the engine bay?"
+      "Is coolant low?",
+      "Do you see leaks?",
+      "Do radiator fans turn on?",
+      "Does the heater blow hot?",
+      "Is steam coming from engine bay?"
     ]
   },
-
   battery: {
     title: "🔋 Battery / Charging",
     questions: [
       "Does it need jumped often?",
-      "Are the battery terminals dirty or loose?",
-      "Is battery voltage below 12.2V with engine off?",
-      "Is voltage below 13.5V while running?",
-      "Is the battery light on?"
+      "Are terminals dirty or loose?",
+      "Is voltage below 12.2V off?",
+      "Is voltage below 13.5V running?",
+      "Is battery light on?"
     ]
   },
-
   brakeLights: {
     title: "💡 Brake Lights",
     questions: [
       "Do any brake lights work?",
-      "Are the brake light fuses good?",
-      "Do the tail lights work?",
-      "Does the brake switch have power?",
+      "Are fuses good?",
+      "Do tail lights work?",
+      "Does brake switch have power?",
       "Has trailer wiring been messed with?"
     ]
   }
 };
 
 const codes = {
-  P0300: "Random/multiple cylinder misfire. Check spark plugs, coils, fuel pressure, vacuum leaks, and compression.",
-  P0301: "Cylinder 1 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0302: "Cylinder 2 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0303: "Cylinder 3 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0304: "Cylinder 4 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0305: "Cylinder 5 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0306: "Cylinder 6 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0307: "Cylinder 7 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0308: "Cylinder 8 misfire. Check spark plug, coil, injector, compression, and wiring.",
-  P0171: "System too lean bank 1. Check vacuum leaks, intake leaks, MAF sensor, fuel pressure, and exhaust leaks.",
-  P0174: "System too lean bank 2. Check vacuum leaks, intake leaks, MAF sensor, fuel pressure, and exhaust leaks.",
-  P0420: "Catalyst efficiency below threshold bank 1. Could be catalytic converter, oxygen sensor, or exhaust leak.",
-  P0430: "Catalyst efficiency below threshold bank 2. Could be catalytic converter, oxygen sensor, or exhaust leak.",
-  P0128: "Coolant temperature below thermostat regulating temp. Usually thermostat stuck open or low coolant.",
-  P0335: "Crankshaft position sensor circuit fault. Check crank sensor, wiring, connector, and PCM signal.",
-  P0340: "Camshaft position sensor circuit fault. Check cam sensor, wiring, connector, and PCM signal.",
-  P2284: "ICP sensor circuit range/performance. Check ICP sensor, oil pressure, wiring, and connector.",
+  P0300: "Random/multiple cylinder misfire. Check plugs, coils, fuel pressure, vacuum leaks, and compression.",
+  P0301: "Cylinder 1 misfire. Check plug, coil, injector, compression, and wiring.",
+  P0302: "Cylinder 2 misfire. Check plug, coil, injector, compression, and wiring.",
+  P0303: "Cylinder 3 misfire. Check plug, coil, injector, compression, and wiring.",
+  P0304: "Cylinder 4 misfire. Check plug, coil, injector, compression, and wiring.",
+  P0171: "Lean condition bank 1. Check vacuum leaks, intake leaks, MAF, fuel pressure.",
+  P0174: "Lean condition bank 2. Check vacuum leaks, intake leaks, MAF, fuel pressure.",
+  P0420: "Catalyst efficiency low bank 1. Check catalytic converter, O2 sensor, exhaust leak.",
+  P0430: "Catalyst efficiency low bank 2. Check catalytic converter, O2 sensor, exhaust leak.",
+  P0335: "Crankshaft position sensor circuit fault. Check crank sensor, wiring, connector.",
+  P0340: "Camshaft position sensor circuit fault. Check cam sensor, wiring, connector.",
   P2285: "ICP sensor circuit low. Check ICP sensor, wiring, connector, and 5V reference.",
-  P2286: "ICP sensor circuit high. Check ICP sensor, wiring, connector, and sensor signal.",
-  P2290: "Injector control pressure too low. On diesels, check oil level, ICP, IPR, HPOP, leaks, and base oil pressure.",
-  P2291: "Injector control pressure too low while cranking. Check oil level, ICP/IPR, HPOP, leaks, and cranking speed.",
+  P2290: "Injector control pressure too low. Check oil level, ICP, IPR, HPOP, leaks.",
+  P2291: "Injector control pressure too low while cranking. Check oil level, ICP/IPR, HPOP, cranking speed.",
   B1352: "Ford ignition key-in circuit fault. Check ignition switch, cluster, fuses, and wiring.",
-  U0100: "Lost communication with PCM/ECM. Check power, grounds, fuses, battery voltage, and CAN wiring.",
-  U1900: "CAN bus communication fault. Check modules, grounds, wiring, low voltage, and cluster/PCM communication."
+  U0100: "Lost communication with PCM/ECM. Check power, grounds, fuses, battery voltage, CAN wiring.",
+  U1900: "CAN bus communication fault. Check modules, grounds, wiring, low voltage."
 };
 
 function hideHome() {
@@ -80,11 +138,107 @@ function hideHome() {
 }
 
 function showHome() {
-  document.getElementById("home").style.display = "block";
+  document.getElementById("home").style.display = "grid";
   document.getElementById("screen").innerHTML = "";
   currentProblem = "";
   step = 0;
   answers = [];
+}
+
+function showVehicleLookup() {
+  hideHome();
+  document.getElementById("screen").innerHTML = `
+    <div class="card">
+      <h2>🚘 Vehicle Lookup</h2>
+      <p>Enter vehicle info. Some vehicles already have data added.</p>
+
+      <input id="yearInput" placeholder="Year ex: 2006">
+      <input id="makeInput" placeholder="Make ex: Ford">
+      <input id="modelInput" placeholder="Model ex: F250">
+      <input id="engineInput" placeholder="Engine ex: 6.0">
+
+      <button onclick="lookupVehicle()">Search Vehicle</button>
+      <div id="vehicleResult"></div>
+      <button onclick="showHome()">Back</button>
+    </div>
+  `;
+}
+
+function lookupVehicle() {
+  const year = document.getElementById("yearInput").value.toLowerCase().trim();
+  const make = document.getElementById("makeInput").value.toLowerCase().trim();
+  const model = document.getElementById("modelInput").value.toLowerCase().replace(/\s+/g, "").trim();
+  const engine = document.getElementById("engineInput").value.toLowerCase().trim();
+
+  let key = `${year}-${make}-${model}`;
+  if (engine.includes("6.0")) key = "2006-ford-f250-6.0";
+
+  const data = vehicleData[key];
+  const box = document.getElementById("vehicleResult");
+
+  if (!data) {
+    box.innerHTML = `
+      <div class="card">
+        <h3>Vehicle not added yet</h3>
+        <p>This app is built for 1990+ vehicles, but this vehicle's detailed data has not been added yet.</p>
+        <p><b>Next step:</b> Use Code Lookup, Fuse Finder, or Mechanic Assistant for general help.</p>
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="card">
+      <h3>${data.name}</h3>
+      <h4>Fuse Box Locations</h4>
+      <ul>${data.fuseBoxes.map(x => `<li>${x}</li>`).join("")}</ul>
+
+      <h4>Common Fuses / Relays To Check</h4>
+      <ul>${data.commonFuses.map(x => `<li>${x}</li>`).join("")}</ul>
+
+      <h4>Common Problems</h4>
+      <ul>${data.commonProblems.map(x => `<li>${x}</li>`).join("")}</ul>
+    </div>
+  `;
+}
+
+function showFuseFinder() {
+  hideHome();
+  document.getElementById("screen").innerHTML = `
+    <div class="card">
+      <h2>⚡ Fuse Finder</h2>
+      <p>Choose what system is not working.</p>
+
+      <button onclick="fuseHelp('nostart')">No Start / No Crank</button>
+      <button onclick="fuseHelp('fuel')">Fuel Pump / Fuel Issue</button>
+      <button onclick="fuseHelp('lights')">Lights / Brake Lights</button>
+      <button onclick="fuseHelp('cluster')">Dash / Cluster / Ignition</button>
+      <button onclick="fuseHelp('charging')">Battery / Charging</button>
+
+      <div id="fuseResult"></div>
+      <button onclick="showHome()">Back</button>
+    </div>
+  `;
+}
+
+function fuseHelp(type) {
+  const result = document.getElementById("fuseResult");
+
+  const help = {
+    nostart: ["Starter relay", "Ignition fuse", "PCM/ECM fuse", "Neutral safety circuit", "Main power fuse"],
+    fuel: ["Fuel pump fuse", "Fuel pump relay", "PCM power fuse", "Injector fuse", "Fuel shutoff circuit"],
+    lights: ["Brake light fuse", "Stop lamp switch fuse", "Tail lamp fuse", "Trailer wiring fuse", "Grounds near rear lights"],
+    cluster: ["Cluster fuse", "Ignition switch fuse", "Body control module fuse", "PCM communication fuse", "Grounds"],
+    charging: ["Alternator fuse", "Fusible link", "Battery junction fuse", "Main power fuse", "Ground straps"]
+  };
+
+  result.innerHTML = `
+    <div class="card">
+      <h3>Check these first:</h3>
+      <ul>${help[type].map(x => `<li>${x}</li>`).join("")}</ul>
+      <p><b>Tip:</b> Fuse names change by vehicle, so always confirm with the fuse box cover or owner’s manual.</p>
+    </div>
+  `;
 }
 
 function startProblem(problem) {
@@ -97,16 +251,15 @@ function startProblem(problem) {
 
 function askQuestion() {
   const p = problems[currentProblem];
-
   document.getElementById("screen").innerHTML = `
     <div class="card">
       <h2>${p.title}</h2>
-      <p class="small">Question ${step + 1} of ${p.questions.length}</p>
-      <p class="question">${p.questions[step]}</p>
+      <p>Question ${step + 1} of ${p.questions.length}</p>
+      <h3>${p.questions[step]}</h3>
       <button onclick="answer('yes')">Yes</button>
       <button onclick="answer('no')">No</button>
       <button onclick="answer('not sure')">Not Sure</button>
-      <button class="back" onclick="showHome()">Back</button>
+      <button onclick="showHome()">Back</button>
     </div>
   `;
 }
@@ -114,112 +267,43 @@ function askQuestion() {
 function answer(response) {
   answers.push(response);
   step++;
-
-  if (step >= problems[currentProblem].questions.length) {
-    diagnose();
-  } else {
-    askQuestion();
-  }
+  if (step >= problems[currentProblem].questions.length) diagnose();
+  else askQuestion();
 }
 
 function diagnose() {
   let result = "";
 
-  if (currentProblem === "wontStart") result = diagnoseWontStart();
-  if (currentProblem === "overheating") result = diagnoseOverheating();
-  if (currentProblem === "battery") result = diagnoseBattery();
-  if (currentProblem === "brakeLights") result = diagnoseBrakeLights();
+  if (currentProblem === "wontStart") {
+    if (answers[1] === "no") result = "Most likely battery, cable, ground, or main fuse issue.";
+    else if (answers[0] === "no" && answers[2] === "yes") result = "Most likely weak battery, starter, relay, or cable issue.";
+    else if (answers[0] === "yes" && answers[3] === "yes") result = "Most likely fuel delivery issue.";
+    else if (answers[4] === "yes") result = "Possible security, key, ignition, or module communication issue.";
+    else result = "Check battery, fuel pressure, spark/injector pulse, crank/cam signal, and codes.";
+  }
+
+  if (currentProblem === "overheating") result = "Check coolant level, leaks, fans, thermostat, water pump, and radiator flow.";
+  if (currentProblem === "battery") result = "Check battery voltage, terminals, alternator output, fuses, and grounds.";
+  if (currentProblem === "brakeLights") result = "Check bulbs, fuse, brake switch power in/out, grounds, and trailer wiring.";
 
   document.getElementById("screen").innerHTML = `
     <div class="card">
       <h2>Diagnosis</h2>
-      ${result}
+      <p>${result}</p>
       <button onclick="showHome()">Start Over</button>
     </div>
   `;
 }
 
-function diagnoseWontStart() {
-  if (answers[1] === "no") {
-    return `<p class="bad">Most likely: dead battery, bad cable, bad ground, or blown main fuse.</p>
-    <ol><li>Check battery voltage.</li><li>Clean terminals.</li><li>Check main fuses.</li><li>Check grounds.</li></ol>`;
-  }
-
-  if (answers[0] === "no" && answers[2] === "yes") {
-    return `<p class="warn">Most likely: weak battery, bad starter, bad relay, or bad cable.</p>
-    <ol><li>Load test battery.</li><li>Check voltage drop.</li><li>Check starter relay.</li><li>Check starter signal wire.</li></ol>`;
-  }
-
-  if (answers[0] === "yes" && answers[3] === "yes") {
-    return `<p class="warn">Most likely: fuel delivery issue.</p>
-    <ol><li>Check fuel pressure.</li><li>Check fuel pump.</li><li>Check fuel filter.</li><li>Check injector signal.</li></ol>`;
-  }
-
-  if (answers[4] === "yes") {
-    return `<p class="warn">Possible security, key, ignition, or module communication issue.</p>
-    <ol><li>Try another key.</li><li>Scan body/security codes.</li><li>Check ignition switch.</li><li>Check PCM/cluster communication.</li></ol>`;
-  }
-
-  return `<p class="good">Start with basic no-start testing.</p>
-  <ol><li>Battery/load test.</li><li>Scan for codes.</li><li>Check fuel pressure.</li><li>Check spark/injector pulse.</li><li>Check crank/cam signal.</li></ol>`;
-}
-
-function diagnoseOverheating() {
-  if (answers[0] === "yes" || answers[1] === "yes") {
-    return `<p class="bad">Most likely: coolant leak or low coolant.</p>
-    <ol><li>Do not keep driving hot.</li><li>Pressure test cooling system.</li><li>Check hoses, radiator, water pump, and reservoir.</li><li>Refill/bleed after repair.</li></ol>`;
-  }
-
-  if (answers[2] === "no") {
-    return `<p class="warn">Possible radiator fan issue.</p>
-    <ol><li>Check fan fuse/relay.</li><li>Check fan motor.</li><li>Check coolant temp sensor.</li><li>Check wiring.</li></ol>`;
-  }
-
-  return `<p class="warn">Possible thermostat, air pocket, radiator restriction, or water pump issue.</p>
-  <ol><li>Check thermostat.</li><li>Bleed air.</li><li>Check radiator flow.</li><li>Check water pump.</li></ol>`;
-}
-
-function diagnoseBattery() {
-  if (answers[3] === "yes" || answers[4] === "yes") {
-    return `<p class="bad">Most likely: alternator or charging system issue.</p>
-    <ol><li>Check running voltage.</li><li>Check alternator belt.</li><li>Check alternator fuse/fusible link.</li><li>Check grounds and cables.</li></ol>`;
-  }
-
-  if (answers[1] === "yes") {
-    return `<p class="warn">Most likely: bad battery connection.</p>
-    <ol><li>Clean terminals.</li><li>Tighten cables.</li><li>Check grounds.</li><li>Retest voltage.</li></ol>`;
-  }
-
-  return `<p class="good">Start with battery test and parasitic draw check.</p>
-  <ol><li>Fully charge battery.</li><li>Load test battery.</li><li>Check alternator output.</li><li>Check for power draw overnight.</li></ol>`;
-}
-
-function diagnoseBrakeLights() {
-  if (answers[0] === "no" && answers[1] === "yes") {
-    return `<p class="warn">Most likely: brake switch, ground, wiring, or multifunction switch.</p>
-    <ol><li>Check power into brake switch.</li><li>Check power out when pedal is pressed.</li><li>Check rear grounds.</li><li>Check wiring to rear lights.</li></ol>`;
-  }
-
-  if (answers[4] === "yes") {
-    return `<p class="bad">Trailer wiring may be shorted or hacked up.</p>
-    <ol><li>Inspect trailer plug wiring.</li><li>Disconnect trailer harness and retest.</li><li>Check fuse again.</li><li>Repair damaged wires properly.</li></ol>`;
-  }
-
-  return `<p class="good">Brake light circuit needs step-by-step testing.</p>
-  <ol><li>Check bulbs.</li><li>Check fuse.</li><li>Check brake switch power in/out.</li><li>Check rear grounds.</li></ol>`;
-}
-
 function showCodeLookup() {
   hideHome();
-
   document.getElementById("screen").innerHTML = `
     <div class="card">
       <h2>📟 Code Lookup</h2>
-      <p class="small">Enter a code like P0300, P0340, B1352, U1900</p>
-      <input id="codeInput" placeholder="Enter code">
+      <input id="codeInput" placeholder="Enter code ex: P0300">
       <button onclick="lookupCode()">Search</button>
       <div id="codeResult"></div>
-      <button class="back" onclick="showHome()">Back</button>
+      <button onclick="showHome()">Back</button>
     </div>
   `;
 }
@@ -228,58 +312,27 @@ function lookupCode() {
   const input = document.getElementById("codeInput").value.toUpperCase().trim();
   const result = document.getElementById("codeResult");
 
-  if (input === "") {
-    result.innerHTML = `<p class="warn">Enter a code first.</p>`;
-    return;
-  }
-
   if (codes[input]) {
-    result.innerHTML = `<p class="good"><b>${input}</b>: ${codes[input]}</p>`;
+    result.innerHTML = `<div class="card"><p><b>${input}</b>: ${codes[input]}</p></div>`;
     return;
   }
 
-  const firstLetter = input.charAt(0);
-  const secondChar = input.charAt(1);
-
-  if (firstLetter === "P" && secondChar === "0") {
-    result.innerHTML = `<p class="warn"><b>${input}</b>: Generic powertrain code.</p><p>Usually engine, fuel, ignition, emissions, sensors, or transmission.</p>`;
-    return;
-  }
-
-  if (firstLetter === "P" && secondChar === "1") {
-    result.innerHTML = `<p class="warn"><b>${input}</b>: Manufacturer-specific powertrain code.</p><p>You need the exact year, make, model, and engine.</p>`;
-    return;
-  }
-
-  if (firstLetter === "B") {
-    result.innerHTML = `<p class="warn"><b>${input}</b>: Body system code.</p><p>Usually ignition, cluster, security, lights, doors, or body module wiring.</p>`;
-    return;
-  }
-
-  if (firstLetter === "C") {
-    result.innerHTML = `<p class="warn"><b>${input}</b>: Chassis system code.</p><p>Usually ABS, brakes, steering, suspension, traction control, or wheel speed sensors.</p>`;
-    return;
-  }
-
-  if (firstLetter === "U") {
-    result.innerHTML = `<p class="warn"><b>${input}</b>: Network communication code.</p><p>Check battery voltage, grounds, fuses, modules, and CAN wiring.</p>`;
-    return;
-  }
-
-  result.innerHTML = `<p class="bad">Code not recognized.</p>`;
+  if (input.startsWith("P")) result.innerHTML = `<div class="card"><p><b>${input}</b>: Powertrain code. Engine, fuel, ignition, emissions, or transmission related.</p></div>`;
+  else if (input.startsWith("B")) result.innerHTML = `<div class="card"><p><b>${input}</b>: Body system code. Lights, ignition, cluster, security, doors, or BCM related.</p></div>`;
+  else if (input.startsWith("C")) result.innerHTML = `<div class="card"><p><b>${input}</b>: Chassis code. ABS, steering, brakes, suspension, or traction control related.</p></div>`;
+  else if (input.startsWith("U")) result.innerHTML = `<div class="card"><p><b>${input}</b>: Communication code. Check battery voltage, grounds, fuses, modules, and CAN wiring.</p></div>`;
+  else result.innerHTML = `<div class="card"><p>Code not recognized.</p></div>`;
 }
 
 function showAssistant() {
   hideHome();
-
   document.getElementById("screen").innerHTML = `
     <div class="card">
       <h2>🤖 Mechanic Assistant</h2>
-      <p class="small">Ask about won’t start, overheating, battery, brake lights, or a code.</p>
       <input id="chatInput" placeholder="Type your problem...">
       <button onclick="askAssistant()">Ask</button>
       <div id="chatAnswer"></div>
-      <button class="back" onclick="showHome()">Back</button>
+      <button onclick="showHome()">Back</button>
     </div>
   `;
 }
@@ -288,22 +341,9 @@ function askAssistant() {
   const input = document.getElementById("chatInput").value.toLowerCase().trim();
   const answer = document.getElementById("chatAnswer");
 
-  if (input === "") {
-    answer.innerHTML = `<p class="warn">Type a problem first.</p>`;
-    return;
-  }
-
-  if (input.includes("code") || input.match(/[pbcu][0-9]{4}/i)) {
-    answer.innerHTML = `<p class="warn">Use the Code Lookup button for exact code help.</p>`;
-  } else if (input.includes("start") || input.includes("crank") || input.includes("click")) {
-    answer.innerHTML = `<p class="good">Start with battery voltage, starter signal, fuel pressure, spark/injector pulse, and codes.</p>`;
-  } else if (input.includes("overheat") || input.includes("hot")) {
-    answer.innerHTML = `<p class="bad">Do not keep driving hot. Check coolant level, leaks, fans, thermostat, and water pump.</p>`;
-  } else if (input.includes("battery") || input.includes("alternator") || input.includes("charging")) {
-    answer.innerHTML = `<p class="warn">Check battery voltage: around 12.6V off and 13.5V–14.7V running.</p>`;
-  } else if (input.includes("brake")) {
-    answer.innerHTML = `<p class="warn">Check brake fuse, brake switch power in/out, rear grounds, bulbs, and trailer wiring.</p>`;
-  } else {
-    answer.innerHTML = `<p class="warn">I’m not sure yet. Try words like “won’t start,” “overheating,” “battery,” or “brake lights.”</p>`;
-  }
+  if (input.includes("fuse")) answer.innerHTML = `<div class="card"><p>Use Fuse Finder. Start with system fuse, relay, related module fuse, and grounds.</p></div>`;
+  else if (input.includes("start") || input.includes("crank") || input.includes("click")) answer.innerHTML = `<div class="card"><p>Check battery voltage, starter signal, ignition switch, fuel pressure, spark/injector pulse, crank/cam signal, and codes.</p></div>`;
+  else if (input.includes("overheat") || input.includes("hot")) answer.innerHTML = `<div class="card"><p>Do not keep driving hot. Check coolant, leaks, fans, thermostat, water pump, and radiator flow.</p></div>`;
+  else if (input.includes("battery") || input.includes("alternator")) answer.innerHTML = `<div class="card"><p>Check 12.6V engine off and 13.5V–14.7V running. Inspect terminals, grounds, belt, alternator fuse.</p></div>`;
+  else answer.innerHTML = `<div class="card"><p>Try asking about no start, overheating, battery, fuse, brake lights, or a code.</p></div>`;
 }
