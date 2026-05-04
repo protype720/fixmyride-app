@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FixMyRide</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <h1>🔧 FixMyRide</h1>
+  <p class="subtitle">Step-by-step vehicle problem helper</p>
+
+  <div id="home">
+    <button onclick="startProblem('wontStart')">🚗 Won’t Start</button>
+    <button onclick="startProblem('overheating')">🔥 Overheating</button>
+    <button onclick="startProblem('battery')">🔋 Battery / Charging</button>
+    <button onclick="startProblem('brakeLights')">💡 Brake Lights</button>
+    <button onclick="showCodeLookup()">📟 Code Lookup</button>
+  </div>
+
+  <div id="screen"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

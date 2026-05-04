@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #080808;
+  color: white;
+}
+
+.app {
+  max-width: 430px;
+  margin: auto;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 34px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #aaa;
+  margin-bottom: 25px;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin: 9px 0;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1f6feb, #3b82f6);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.back {
+  background: #333;
+}
+
+.card {
+  background: #181818;
+  padding: 18px;
+  border-radius: 18px;
+  margin-top: 18px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.question {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.small {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.good {
+  color: #00ff99;
+  font-weight: bold;
+}
+
+.warn {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+.bad {
+  color: #ff6666;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin: 10px 0;
+}
