@@ -5,22 +5,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FixMyRide Helper Pro</title>
-  <link rel="stylesheet" href="style.css?v=30">
+  <link rel="stylesheet" href="style.css?v=40">
 </head>
 <body>
 
 <div class="app">
-  <h1>🔧 FixMyRide Helper Pro</h1>
+  <div class="hero">
+    <h1>🔧 FixMyRide Helper Pro</h1>
+    <p>Vehicle diagnostics, fuse help, codes, and repair guidance.</p>
+  </div>
 
   <div id="home" class="grid">
     <button onclick="showVehicleLookup()">🚘 Vehicle Lookup</button>
     <button onclick="showFuseFinder()">⚡ Fuse Finder</button>
-    <button onclick="showAssistant()">🤖 Assistant</button>
+    <button onclick="startProblem('wontStart')">🚗 Won’t Start</button>
+    <button onclick="startProblem('overheating')">🔥 Overheating</button>
+    <button onclick="startProblem('battery')">🔋 Battery / Charging</button>
+    <button onclick="startProblem('brakeLights')">💡 Brake Lights</button>
+    <button onclick="showCodeLookup()">📟 Code Lookup</button>
+    <button onclick="showAssistant()">🤖 Mechanic Assistant</button>
   </div>
 
   <div id="screen"></div>
+
+  <div class="notice">
+    <b>Safety:</b> Always verify fuse/relay locations with the vehicle owner’s manual or service info.
+  </div>
 </div>
 
-<script src="script.js?v=30"></script>
+<footer class="footer">
+  <p>Made by <b>James (jamesad6915)</b></p>
+  <p>Contact: <a href="mailto:viewtrigger41@gmail.com">viewtrigger41@gmail.com</a></p>
+  <p><a href="privacy.html">Privacy Policy</a></p>
+  <p>© 2026 FixMyRide Helper Pro by James (jamesad6915). All rights reserved.</p>
+</footer>
+
+<script src="script.js?v=40"></script>
 </body>
 </html>
