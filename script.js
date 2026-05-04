@@ -123,6 +123,68 @@ function diagnose() {
   `;
 }
 
+function showVehicleLookup() {
+  hideHome();
+
+  document.getElementById("screen").innerHTML = `
+    <div class="card">
+      <h2>🚘 Vehicle Lookup</h2>
+      <input id="yearInput" placeholder="Year ex: 2006">
+      <input id="makeInput" placeholder="Make ex: Ford">
+      <input id="modelInput" placeholder="Model ex: F250">
+      <input id="engineInput" placeholder="Engine ex: 6.0">
+      <button onclick="lookupVehicle()">Search Vehicle</button>
+      <div id="vehicleResult"></div>
+      <button onclick="showHome()">Back</button>
+    </div>
+  `;
+}
+
+function lookupVehicle() {
+  const year = document.getElementById("yearInput").value.trim();
+  const make = document.getElementById("makeInput").value.trim();
+  const model = document.getElementById("modelInput").value.trim();
+  const engine = document.getElementById("engineInput").value.trim();
+
+  let special = "";
+
+  if (year === "2006" && make.toLowerCase().includes("ford") && model.toLowerCase().includes("f250")) {
+    special = `
+      <h4>Known 6.0 Powerstroke Checks</h4>
+      <ul>
+        <li>FICM power fuse</li>
+        <li>PCM power fuse</li>
+        <li>Fuel pump fuse/relay</li>
+        <li>Starter relay</li>
+        <li>ICP/IPR system</li>
+        <li>Cam/crank sync</li>
+      </ul>
+    `;
+  }
+
+  document.getElementById("vehicleResult").innerHTML = `
+    <div class="card">
+      <h3>${year} ${make} ${model} ${engine}</h3>
+      <p><b>General fuse box locations:</b></p>
+      <ul>
+        <li>Under hood near battery</li>
+        <li>Driver side under dash</li>
+        <li>Passenger kick panel or glove box area on some vehicles</li>
+      </ul>
+      <p><b>Common fuses/relays to check:</b></p>
+      <ul>
+        <li>ECM/PCM fuse</li>
+        <li>IGN fuse</li>
+        <li>Starter relay</li>
+        <li>Fuel pump relay</li>
+        <li>Brake light fuse</li>
+      </ul>
+      ${special}
+      <p><b>Note:</b> Verify exact fuse locations with the owner’s manual or fuse box cover.</p>
+    </div>
+  `;
+}
+
 function showFuseFinder() {
   hideHome();
 
@@ -158,51 +220,6 @@ function fuseHelp(type) {
   `;
 }
 
-function showVehicleLookup() {
-  hideHome();
-
-  document.getElementById("screen").innerHTML = `
-    <div class="card">
-      <h2>🚘 Vehicle Lookup</h2>
-      <input id="yearInput" placeholder="Year ex: 2006">
-      <input id="makeInput" placeholder="Make ex: Ford">
-      <input id="modelInput" placeholder="Model ex: F250">
-      <input id="engineInput" placeholder="Engine ex: 6.0">
-      <button onclick="lookupVehicle()">Search Vehicle</button>
-      <div id="vehicleResult"></div>
-      <button onclick="showHome()">Back</button>
-    </div>
-  `;
-}
-
-function lookupVehicle() {
-  const year = document.getElementById("yearInput").value.trim();
-  const make = document.getElementById("makeInput").value.trim();
-  const model = document.getElementById("modelInput").value.trim();
-  const engine = document.getElementById("engineInput").value.trim();
-
-  document.getElementById("vehicleResult").innerHTML = `
-    <div class="card">
-      <h3>${year} ${make} ${model} ${engine}</h3>
-      <p><b>General fuse box locations:</b></p>
-      <ul>
-        <li>Under hood near battery</li>
-        <li>Driver side under dash</li>
-        <li>Passenger kick panel or glove box area on some vehicles</li>
-      </ul>
-      <p><b>Common fuses/relays to check:</b></p>
-      <ul>
-        <li>ECM/PCM fuse</li>
-        <li>IGN fuse</li>
-        <li>Starter relay</li>
-        <li>Fuel pump relay</li>
-        <li>Brake light fuse</li>
-      </ul>
-      <p>Verify exact fuse locations with the owner’s manual or fuse box cover.</p>
-    </div>
-  `;
-}
-
 function showCodeLookup() {
   hideHome();
 
@@ -221,7 +238,18 @@ function lookupCode() {
   const input = document.getElementById("codeInput").value.toUpperCase().trim();
   const result = document.getElementById("codeResult");
 
-  if (input.startsWith("P")) {
+  if (input === "") {
+    result.innerHTML = `<div class="card"><p>Enter a code first.</p></div>`;
+    return;
+  }
+
+  if (input === "P0300") {
+    result.innerHTML = `<div class="card"><p><b>P0300:</b> Random misfire. Check spark plugs, coils, fuel pressure, vacuum leaks, and compression.</p></div>`;
+  } else if (input === "B1352") {
+    result.innerHTML = `<div class="card"><p><b>B1352:</b> Ford ignition key-in circuit fault. Check ignition switch, cluster, fuses, and wiring.</p></div>`;
+  } else if (input === "U1900") {
+    result.innerHTML = `<div class="card"><p><b>U1900:</b> CAN bus communication fault. Check battery voltage, grounds, modules, fuses, and wiring.</p></div>`;
+  } else if (input.startsWith("P")) {
     result.innerHTML = `<div class="card"><p><b>${input}</b>: Powertrain code. Engine, fuel, ignition, emissions, or transmission related.</p></div>`;
   } else if (input.startsWith("B")) {
     result.innerHTML = `<div class="card"><p><b>${input}</b>: Body system code. Lights, ignition, cluster, security, doors, or body module related.</p></div>`;
@@ -252,15 +280,24 @@ function askAssistant() {
   const input = document.getElementById("chatInput").value.toLowerCase().trim();
   const answer = document.getElementById("chatAnswer");
 
-  if (input.includes("fuse")) {
-    answer.innerHTML = `<div class="card"><p>Use Fuse Finder. Start with system fuse, relay, related module fuse, and grounds.</p></div>`;
+  if (input === "") {
+    answer.innerHTML = `<div class="card"><p>Type a problem first.</p></div>`;
+    return;
+  }
+
+  if (input.includes("hi") || input.includes("hello") || input.includes("hey")) {
+    answer.innerHTML = `<div class="card"><p>Hey 👋 Tell me what the vehicle is doing. Example: “cranks but won’t start” or “brake lights don’t work.”</p></div>`;
+  } else if (input.includes("fuse")) {
+    answer.innerHTML = `<div class="card"><p>Use Fuse Finder. Start with the system fuse, relay, related module fuse, and grounds.</p></div>`;
   } else if (input.includes("start") || input.includes("crank") || input.includes("click")) {
     answer.innerHTML = `<div class="card"><p>Check battery voltage, starter signal, ignition switch, fuel pressure, spark/injector pulse, crank/cam signal, and codes.</p></div>`;
   } else if (input.includes("overheat") || input.includes("hot")) {
     answer.innerHTML = `<div class="card"><p>Do not keep driving hot. Check coolant, leaks, fans, thermostat, water pump, and radiator flow.</p></div>`;
   } else if (input.includes("battery") || input.includes("alternator")) {
-    answer.innerHTML = `<div class="card"><p>Check 12.6V engine off and 13.5V–14.7V running. Inspect terminals, grounds, belt, and alternator fuse.</p></div>`;
+    answer.innerHTML = `<div class="card"><p>Check battery voltage: about 12.6V engine off and 13.5V–14.7V running. Inspect terminals, grounds, belt, and alternator fuse.</p></div>`;
+  } else if (input.includes("brake")) {
+    answer.innerHTML = `<div class="card"><p>Check brake light fuse, brake switch power in/out, bulbs, rear grounds, and trailer wiring.</p></div>`;
   } else {
-    answer.innerHTML = `<div class="card"><p>Try asking about no start, overheating, battery, fuse, brake lights, or a code.</p></div>`;
+    answer.innerHTML = `<div class="card"><p>I can help with that. Give me the year, make, model, and what it’s doing. Example: “2006 F250 cranks but won’t start.”</p></div>`;
   }
 }
