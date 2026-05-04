@@ -6,9 +6,9 @@ body {
 }
 
 .app {
-  padding: 20px;
   max-width: 900px;
   margin: auto;
+  padding: 20px;
 }
 
 .hero {
@@ -17,8 +17,8 @@ body {
 }
 
 .hero h1 {
-  font-size: 28px;
   margin: 0;
+  font-size: 30px;
 }
 
 .hero p {
@@ -32,13 +32,16 @@ body {
 }
 
 button {
-  padding: 15px;
+  width: 100%;
+  padding: 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #1e293b;
   color: white;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+  margin-top: 8px;
 }
 
 button:hover {
@@ -47,30 +50,38 @@ button:hover {
 
 .card {
   background: #1e293b;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 20px;
+  padding: 18px;
+  border-radius: 14px;
+  margin-top: 18px;
 }
 
 input {
   width: 100%;
-  padding: 12px;
+  padding: 13px;
   margin-top: 10px;
-  border-radius: 8px;
+  box-sizing: border-box;
+  border-radius: 10px;
   border: none;
   background: #0f172a;
   color: white;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 40px;
-  color: #94a3b8;
+  font-size: 16px;
 }
 
 .notice {
   margin-top: 20px;
-  font-size: 12px;
+  font-size: 13px;
   color: #fbbf24;
   text-align: center;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 35px;
+  padding: 20px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #60a5fa;
 }
