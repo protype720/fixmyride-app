@@ -1,45 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta name="google-adsense-account" content="ca-pub-5311280622440166">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FixMyRide Helper Pro</title>
-  <link rel="stylesheet" href="style.css?v=60">
+
+  <title>FixMyRide Helper Pro | Free Car Diagnostic & Repair Tool</title>
+
+  <meta name="description" content="FixMyRide Helper Pro helps diagnose car and truck problems including no-start issues, overheating, battery charging problems, fuse locations, brake light problems, and OBD2 trouble codes.">
+
+  <meta name="keywords" content="car repair, truck diagnostics, fuse finder, OBD2 codes, mechanic helper, no start diagnosis, battery problems, overheating fix, brake light problems, Ford, Chevy, Dodge, Toyota">
+
+  <meta name="author" content="James Adams">
+
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:title" content="FixMyRide Helper Pro">
+  <meta property="og:description" content="Free car and truck repair helper with diagnostics, code lookup, fuse help, battery troubleshooting, overheating help, and mechanic tools.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://protype720.github.io/fixmyride-app/">
+
+  <link rel="canonical" href="https://protype720.github.io/fixmyride-app/">
+
+  <meta name="google-adsense-account" content="ca-pub-5311280622440166">
+
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5311280622440166"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="style.css?v=62">
 </head>
+
 <body>
 
-<div class="app">
-  <div class="hero">
-    <h1>🔧 FixMyRide Helper Pro</h1>
-    <p>Diagnostics, fuse help, codes, and repair guidance.</p>
+  <div class="app">
+
+    <div class="hero">
+      <h1>🔧 FixMyRide Helper Pro</h1>
+
+      <p>
+        Free vehicle diagnostics, fuse help, trouble code lookup,
+        no-start troubleshooting, overheating fixes, battery testing,
+        and mechanic guidance.
+      </p>
+    </div>
+
+    <div id="home" class="grid">
+
+      <button onclick="showVehicleLookup()">
+        🚘 Vehicle Lookup
+      </button>
+
+      <button onclick="showFuseFinder()">
+        ⚡ Fuse Finder
+      </button>
+
+      <button onclick="startProblem('wontStart')">
+        🚗 Won’t Start
+      </button>
+
+      <button onclick="startProblem('overheating')">
+        🔥 Overheating
+      </button>
+
+      <button onclick="startProblem('battery')">
+        🔋 Battery / Charging
+      </button>
+
+      <button onclick="startProblem('brakeLights')">
+        💡 Brake Lights
+      </button>
+
+      <button onclick="showCodeLookup()">
+        📟 Code Lookup
+      </button>
+
+      <button onclick="showAssistant()">
+        🤖 Mechanic Assistant
+      </button>
+
+    </div>
+
+    <div id="screen"></div>
+
+    <div class="notice">
+      <b>Safety Notice:</b>
+      Always verify fuse and relay locations using the vehicle owner's
+      manual or fuse box diagram before replacing components.
+    </div>
+
   </div>
 
-  <div id="home" class="grid">
-    <button onclick="showVehicleLookup()">🚘 Vehicle Lookup</button>
-    <button onclick="showFuseFinder()">⚡ Fuse Finder</button>
-    <button onclick="startProblem('wontStart')">🚗 Won’t Start</button>
-    <button onclick="startProblem('overheating')">🔥 Overheating</button>
-    <button onclick="startProblem('battery')">🔋 Battery / Charging</button>
-    <button onclick="startProblem('brakeLights')">💡 Brake Lights</button>
-    <button onclick="showCodeLookup()">📟 Code Lookup</button>
-    <button onclick="showAssistant()">🤖 Mechanic Assistant</button>
-  </div>
+  <footer class="footer">
 
-  <div id="screen"></div>
+    <p>
+      Made by <b>James (jamesad6915)</b>
+    </p>
 
-  <div class="notice">
-    <b>Safety:</b> Always verify fuse/relay locations with the owner’s manual or fuse box cover.
-  </div>
-</div>
+    <p>
+      Contact:
+      <a href="mailto:viewtrigger41@gmail.com">
+        viewtrigger41@gmail.com
+      </a>
+    </p>
 
-<footer class="footer">
-  <p>Made by <b>James (jamesad6915)</b></p>
-  <p>Contact: <a href="mailto:viewtrigger41@gmail.com">viewtrigger41@gmail.com</a></p>
-  <p><a href="privacy.html">Privacy Policy</a></p>
-  <p>© 2026 FixMyRide Helper Pro by James (jamesad6915). All rights reserved.</p>
-</footer>
+    <p>
+      <a href="privacy.html">
+        Privacy Policy
+      </a>
+    </p>
 
-<script src="script.js?v=61"></script>
+    <p>
+      © 2026 FixMyRide Helper Pro. All rights reserved.
+    </p>
+
+  </footer>
+
+  <script src="script.js?v=62"></script>
+
 </body>
+
 </html>
